@@ -1,28 +1,51 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+#include <tuple> //タプル
 
-class my_container {
-public:
-  int *begin() {
-    return &buf[0];
-  }
-  int *end() {
-    return &buf[5];
-  }
+struct MyInt
+{
+    int value;
+    /* data */
+};
+bool operator<(const MyInt& a, const MyInt& b) noexcept
+{
+    return a.value < b.value;
+}
 
-private:
-  int buf[5] = {21, 22, 23, 24, 25};
+struct Person
+{
+    int id;
+    int age;
+    std::string name;
+    /* data */
 };
 
+bool operator<(const Person& a, const Person& b) noexcept
+{
+    return std::tie(a.id, a.age, a.name) < std::tie(b.id, b.age, b.name);
+}
+
+
+
+
 int main(int, char**) {
-  //ユーザ定義のクラスに対して範囲for文を使う
-  my_container mc;
+    std::map<MyInt, int> m1{
+        {MyInt{1}, 3},
+        {MyInt{2}, 1},
+        {MyInt{3}, 4},
+    };
+    std::cout << m1[MyInt{2}]  << std::endl;
+    //追加
+    std::cout << m1[MyInt{3}]  << std::endl;
 
-  std::cout << "For my_container: " << std::endl;
-  for (auto& e : mc) {
-    std::cout << "  " << e << std::endl;
-  }
-
-  return 0;
+    std::map<Person, int> m2{
+        {Person{1, 18, "Alice"}, 3},
+        {Person{2, 30, "Bob"}, 1},
+        {Person{3, 30, "carol"}, 5},
+    };
+    std::cout << m2[Person{2,30,"Bob"}]  << std::endl;
+    //追加
+    std::cout << m2[Person{1,18,"Alice"}]  << std::endl;
 }
