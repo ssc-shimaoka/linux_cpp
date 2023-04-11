@@ -9,6 +9,8 @@ struct MyInt
     int value;
     /* data */
 };
+
+//operator...[<]の演算子を独自のものに上書きしている。
 bool operator<(const MyInt& a, const MyInt& b) noexcept
 {
     return a.value < b.value;
