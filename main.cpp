@@ -1,20 +1,28 @@
 #include <iostream>
 #include <string>
+#include <vector>
+
+class my_container {
+public:
+  int *begin() {
+    return &buf[0];
+  }
+  int *end() {
+    return &buf[5];
+  }
+
+private:
+  int buf[5] = {21, 22, 23, 24, 25};
+};
 
 int main(int, char**) {
-    std::cout << "Hello, world!\n";
+  //ユーザ定義のクラスに対して範囲for文を使う
+  my_container mc;
 
-    // 01:C++11 auto型推論
-    auto word = "Hello, world2!\n";
-    std::cout << word;
+  std::cout << "For my_container: " << std::endl;
+  for (auto& e : mc) {
+    std::cout << "  " << e << std::endl;
+  }
 
-    // 02:decttype(変数)
-    // あまり使い道がわからない・・・。
-    //  sizeofにもdecttypeには丸括弧が必須
-    auto i = 10;
-    decltype(i) j = i;
-    int m = sizeof (j);
-
-    i = 40;
-    std::cout << j << "," << i <<  "," << m << "byte\n";
+  return 0;
 }
