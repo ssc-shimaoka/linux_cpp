@@ -1,42 +1,38 @@
 #include <iostream>
-#include <iostream>
-#include <stack>
-#include <deque>
-#include <type_traits>
+#include <string>
 
-//クラステンプレート
-template <class T, class Container = std::deque<T>>
-class movable_stack : public std::stack<T, Container> {
-  using base = std::stack<T, Container>;
+struct Parameter {
+  int id;
+  std::string name;
+};
 
-//指定した定数式が偽である場合はコンパイルエラーとなり、static_assertの第2引数で指定した文字列リテラルが診断メッセージとして出力される。
-  static_assert(std::is_nothrow_default_constructible<T>{},"T must be nothrow default constructible");
-  static_assert(std::is_nothrow_move_constructible<T>{},"T must be nothrow move constructible");
+class X {
+  int id_;
+  std::string name_;
 
 public:
-  std::pair<T, bool> move_pop() noexcept //例外を送出する可能性があるか判定するnoexcept演算子
+//コンストラクタ１
+  X(int id, const std::string& name) : id_(id), name_(name)
   {
-    if (base::empty()) {
-      return std::make_pair(T(), false);
-    }
+    std::cout << "invoked (1) constructor" << std::endl;
+    std::cout << "invoked (1) name=" << name_ << std::endl;
+  }
 
-    T x = std::move(base::top());
-    base::pop();
-    return std::make_pair(std::move(x), true);
+//コンストラクタ２
+//コンストラクタ１に初期値を渡して初期化処理を委譲
+//その後、２の処理が走る
+  X(const Parameter& param) : X(param.id, param.name)
+  {
+    std::cout << "invoked (2) constructor" << std::endl;
+    std::cout << "invoked (2) name=" << name_ << std::endl;
   }
 };
 
-int main(int, char**) {
-  movable_stack<int> s;
-  s.push(1);
-  s.push(2);
-  s.push(3);
+int main()
+{
+  Parameter param;
+  param.id = 3;
+  param.name = "Alice";
 
-  while (!s.empty()) {
-    int next_value = s.move_pop().first;
-    std::cout << next_value << std::endl;
-  }
-
-//追加
-  std::cout << s.move_pop().first << std::endl; //[.first]はスタックの先頭を指している？？　これがないとコンパイルエラーとなる。
+  X x(param);
 }
