@@ -1,19 +1,28 @@
-#include <algorithm>
+#include <memory>
 #include <iostream>
-#include <vector>
 
 int main()
 {
-    const int array[] = {1,2,3,4,5,6};
-    //vectorはシーケンスコンテナの一種で、各要素は線形に、順序を保ったまま格納される。
-    std::vector<int> v{array, array + 6};
+    // shared_ptr生成
+    std::shared_ptr<int> sharedPtr(new int(42));
 
-    std::cout << "コンテナのサイズは" << v.size() << std::endl;
+    // shared_ptrを使ってリソースにアクセス
+    int value = *sharedPtr;
 
-    //イテレータ範囲[first, last)から、条件を満たしている要素の数を数える。
-    //条件面にてラムダ式を使っている
-    auto c = std::count_if(v.begin(), v.end(), [](int elem) -> bool {return elem %2 == 0; });
+    value = 10;
+    std::cout << value << std::endl;
 
-    //条件に合うのは「2・4・6」の3つ
-    std::cout << c << std::endl;
+    // リソースの所有権の移譲
+    std::shared_ptr<int> otherSharedPrt = sharedPtr;
+
+    // カスタムデリータの指定
+    std::shared_ptr<int> customDeleterSharedPrt(new int[10], [](int* p){
+        delete[] p;
+    });
+
+    // std::weak_ptrと連携
+    std::shared_ptr<int> sharedPtr1(new int(42));
+    std::weak_ptr<int> weakPtr(sharedPtr1);
+
+    return 0;
 }
