@@ -1,38 +1,30 @@
-#include <iostream>
-#include <string>
+// このソースをビルドすると、ビルドエラーの原因にassertのエラーメッセージが出る。
+// /home/shimaoka/source/main.cpp:7:24: error: static assertion failed: バッファサイズが0です
 
-struct Parameter {
-  int id;
-  std::string name;
-};
+#include <cstddef>
 
-class X {
-  int id_;
-  std::string name_;
+template <std::size_t SIZE>
 
+class Buffer
+{
+    static_assert(SIZE > 0, "バッファサイズが0です");
+private:
+
+    /* data */
 public:
-//コンストラクタ１
-  X(int id, const std::string& name) : id_(id), name_(name)
-  {
-    std::cout << "invoked (1) constructor" << std::endl;
-    std::cout << "invoked (1) name=" << name_ << std::endl;
-  }
+    Buffer(/* args */);
+    ~Buffer();
 
-//コンストラクタ２
-//コンストラクタ１に初期値を渡して初期化処理を委譲
-//その後、２の処理が走る
-  X(const Parameter& param) : X(param.id, param.name)
-  {
-    std::cout << "invoked (2) constructor" << std::endl;
-    std::cout << "invoked (2) name=" << name_ << std::endl;
-  }
+Buffer::Buffer(/* args */)
+{
+}
+
+Buffer::~Buffer()
+{
+}
 };
 
 int main()
 {
-  Parameter param;
-  param.id = 3;
-  param.name = "Alice";
-
-  X x(param);
+    Buffer<0> buf;
 }
