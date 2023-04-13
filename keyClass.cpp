@@ -1,8 +1,7 @@
 #include "keyClass.h"
 
 // コンストラクタ
-Key::Key(int roomNo){
-    _roomNo = roomNo;
+Key::Key(){
     _status = 0;
 }
 
@@ -32,10 +31,6 @@ int Key::close(){
     _status = 0;
 
     return 0;
-}
-
-int Key::getRoomNo(){
-    return _roomNo;
 }
 
 int Key::getStatus(){

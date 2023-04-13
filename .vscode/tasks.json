@@ -9,6 +9,7 @@
                 "-g",
                 "${file}",
                 "${fileDirname}/keyClass.cpp",
+                "${fileDirname}/roomClass.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

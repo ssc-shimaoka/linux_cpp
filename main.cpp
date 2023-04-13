@@ -1,27 +1,35 @@
 #include <memory>
 #include <iostream>
 #include <string>
-#include "keyClass.h"
+#include "roomClass.h"
 
 int main()
 {
     //Keyクラスのインスタンス作成
-    Key* ptr = new Key(501);
-    std::cout << "部屋番号は" << ptr->getRoomNo() << std::endl;
+    Room* room501 = new Room(501);
+    std::cout << "作成した部屋番号は" << room501->getRoomNo() << std::endl;
+
+    Room* room502 = new Room(502);
+    std::cout << "作成した部屋番号は" << room502->getRoomNo() << "\n" << std::endl;
 
     // 現在の状態取得1
-    std::string keyStatus = (ptr->getStatus() == 1 ? "オープン" : "クローズ");
-    std::cout << "現在の鍵の状態は" << keyStatus << std::endl;
+    std::string keyStatus = (room501->getStatus() == 1 ? "オープン" : "クローズ");
+    std::cout << "501室の鍵の状態は" << keyStatus << std::endl;
 
     // open処理
-    ptr->open();
+    room501->open(503);
+    room502->open(502);
 
-    // 現在の状態取得2
-    keyStatus = (ptr->getStatus() == 1 ? "オープン" : "クローズ");
-    std::cout << "現在の鍵の状態は" << keyStatus << std::endl;
+    // 現在の501室の状態取得
+    keyStatus = (room501->getStatus() == 1 ? "オープン" : "クローズ");
+    std::cout << "501室の鍵の状態は" << keyStatus << std::endl;
+
+    // 現在の502室の状態取得
+    keyStatus = (room502->getStatus() == 1 ? "オープン" : "クローズ");
+    std::cout << "502室の鍵の状態は" << keyStatus << std::endl;
 
     // openの状態でopen処理実行
-    ptr->open();
+    room502->open(502);
 
     return 0;
 }

@@ -5,14 +5,12 @@
 class Key
 {
     private:
-        int _roomNo;
         int _status;
 
     public:
-        Key(int roomNo);
+        Key();
         int open();
         int close();
-        int getRoomNo();
         int getStatus();
 };
 
