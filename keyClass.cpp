@@ -37,3 +37,7 @@ int Key::close(){
 int Key::getRoomNo(){
     return _roomNo;
 }
+
+int Key::getStatus(){
+    return _status;
+}

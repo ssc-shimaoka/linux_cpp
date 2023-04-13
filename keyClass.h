@@ -13,6 +13,7 @@ class Key
         int open();
         int close();
         int getRoomNo();
+        int getStatus();
 };
 
 #endif
