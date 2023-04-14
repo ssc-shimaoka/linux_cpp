@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <unistd.h>
 
 /*
 メッセージハンドラインターフェース
@@ -20,6 +21,7 @@ class MessegeHandler {
  protected:
   virtual void onSuccessInternal() = 0;
   virtual void onErrorInternal(const std::string& message) = 0;
+ // virtual int getLoopFlg() = 0;
 };
 
 //---------------------------------------------------------------------
@@ -42,10 +44,9 @@ public:
       std::cout << "call OnError(): " << message << std::endl;
   }
 
-  int getLoopFlg()
-  {
-    return _loopflg;
-  }
+//   int getLoopFlg() override {
+//     return _loopflg;
+//   }
 };
 
 //---------------------------------------------------------------------
@@ -56,11 +57,13 @@ class Messenger {
  public:
   Messenger() = default;
   ~Messenger() = default;
-
+  
+  // コールバック登録
   void setHandler(std::unique_ptr<MessegeHandler> handler) {
     handler_ = std::move(handler);
   }
 
+  // 要求
   void sendMessage(const std::string& message) {
     if (message.size() == 0) {
       if (handler_)
@@ -68,7 +71,8 @@ class Messenger {
       return ;
     }
 
-    // メッセージ送信処理など
+    // 時間のかかる処理
+    sleep(5);
 
     if (handler_)
       handler_->onSuccess();
@@ -90,10 +94,12 @@ int main() {
   //コールバック登録
   messenger->setHandler(std::move(handler));
 
-  while(handler->getLoopFlg())
+  int loop = 1; 
+  while(loop)
   {
     //処理要求
-    messenger->sendMessage("Send message");
+    messenger->sendMessage("start");
+    loop = 0;
   }
 
   return 0;
