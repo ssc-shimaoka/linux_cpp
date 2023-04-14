@@ -21,7 +21,6 @@ class MessegeHandler {
  protected:
   virtual void onSuccessInternal() = 0;
   virtual void onErrorInternal(const std::string& message) = 0;
- // virtual int getLoopFlg() = 0;
 };
 
 //---------------------------------------------------------------------
@@ -31,29 +30,27 @@ class MessegeHandler {
    インターフェースを継承し、処理終了時の処理を実装
 */
 class MessegeHandlerImple : public MessegeHandler {
-private:
-  int _loopflg = 1;
-
 public:
+  // 正常終了時の処理
   void onSuccessInternal() override {
-      std::cout << "call OnCuccess()" << std::endl;
-      _loopflg = 0;
+      std::cout << "非同期処理 正常終了" << std::endl;
   }
 
+  // 異常終了時の処理
   void onErrorInternal(const std::string& message) override {
-      std::cout << "call OnError(): " << message << std::endl;
+      std::cout << "非同期処理 異常終了: " << message << std::endl;
   }
-
-//   int getLoopFlg() override {
-//     return _loopflg;
-//   }
 };
 
 //---------------------------------------------------------------------
 /*
- * 処理要求クラス
+ * 非同期処理クラス
 */
 class Messenger {
+  private:
+  std::unique_ptr<MessegeHandler> handler_;
+  int _loopFlg = 1;
+ 
  public:
   Messenger() = default;
   ~Messenger() = default;
@@ -63,23 +60,30 @@ class Messenger {
     handler_ = std::move(handler);
   }
 
-  // 要求
+  // 非同期処理要求
   void sendMessage(const std::string& message) {
+    // 引数の文字が0文字だった場合、異常終了
     if (message.size() == 0) {
-      if (handler_)
-        handler_->onError("error message");
+      if (handler_) {
+        handler_->onError("なにか入力してください");
+      }
+        
       return ;
     }
 
     // 時間のかかる処理
     sleep(5);
 
-    if (handler_)
+    // 正常終了時
+    if (handler_) {
+        _loopFlg = 0;
       handler_->onSuccess();
+    }
   }
 
- private:
-  std::unique_ptr<MessegeHandler> handler_;
+  int getLoopFlg() {
+    return _loopFlg;
+  }
 };
 
 //---------------------------------------------------------------------
@@ -91,16 +95,17 @@ int main() {
   auto messenger = std::make_unique<Messenger>();
   auto handler = std::make_unique<MessegeHandlerImple>();
 
-  //コールバック登録
+  //コールバック登録 (メッセージハンドラ権限　移譲)
   messenger->setHandler(std::move(handler));
 
-  int loop = 1; 
-  while(loop)
+  while(messenger->getLoopFlg())
   {
-    //処理要求
+    //非同期処理要求（異常系）
+    messenger->sendMessage("");
+
+    //非同期処理要求（正常系）
     messenger->sendMessage("start");
-    loop = 0;
-  }
+   }
 
   return 0;
 }
