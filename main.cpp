@@ -44,15 +44,14 @@ void Subject::AddObserver(Observer& observer){
 }
 
 void Subject::AsyncProcess(){
-  //非同期処理実装（無限待ち状態　設定箇所）
+  //非同期処理実装
   std::thread t([&]{ 
     cout << "別スレッド処理 sleep実施直前" << endl;
     sleep(3); 
     cout << "別スレッド処理 sleep実施完了" << endl;
   });
  
-  //非同期完了待ち（無限待ち状態　解除箇所）
-  //Nofify()にあるべき？
+  //非同期完了待ち（無限待ち状態　設定箇所）
   t.join();
 }
 
@@ -60,7 +59,7 @@ void Subject::Nofify(){
   for(int i =  0; i < this->observers_.size(); i++){
     this->observers_[i]->Update();
   }
-};
+}
 
 //----------------------------------------------------
 //main関数
