@@ -1,28 +1,56 @@
 #include <memory>
 #include <iostream>
+#include <vector>
+#include <string>
+#include <assert.h>
 
+using namespace std;
 int main()
 {
-    // shared_ptr生成
-    std::shared_ptr<int> sharedPtr(new int(42));
+  vector<string> list;
+  list.push_back("No1 test");
+  list.push_back("No2 test");
+  list.push_back("No3 test");
 
-    // shared_ptrを使ってリソースにアクセス
-    int value = *sharedPtr;
+  list.insert(list.begin() + 1, "No0?");
 
-    value = 10;
-    std::cout << value << std::endl;
+  //最初の要素
+  cout << *list.begin() << endl;
 
-    // リソースの所有権の移譲
-    std::shared_ptr<int> otherSharedPrt = sharedPtr;
+  size_t size = list.size();
+  cout << size << endl;
 
-    // カスタムデリータの指定
-    std::shared_ptr<int> customDeleterSharedPrt(new int[10], [](int* p){
-        delete[] p;
-    });
+  //最大サイズ取得
+  size_t s = list.max_size();
+  cout << s << endl;
 
-    // std::weak_ptrと連携
-    std::shared_ptr<int> sharedPtr1(new int(42));
-    std::weak_ptr<int> weakPtr(sharedPtr1);
+// 範囲forで要素アクセス
+  for(auto& i: list)
+  {
+    //operatorが範囲forの場合いらない
+    //string& x = list[i];
+    string x = i;
+    cout << x << endl;
+  }
 
-    return 0;
+  cout << "「at」にて要素取得" << endl;
+  for(int i; i < list.size(); i++)
+  {
+    string y = list.at(i);
+    cout << y << endl;
+  }
+
+  //全削除
+  cout << "要素全削除" << endl;
+  list.clear();
+  assert(list.empty());
+
+   for(int i; i < list.size(); i++)
+  {
+    string y = list.at(i);
+    cout << y << endl;
+  }
+
+
+  return 0;
 }
