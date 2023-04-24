@@ -14,10 +14,10 @@ class Human {
   : _name(name), _height(height), _weight(weight){}
 
   //名前の取得
-  std::string& get_name(){ return _name; }
+  const std::string& get_name(){ return _name; }
 
   //BMI計算
-  double cal_bmi(){
+  double cal_bmi() const {
     double bmi = _weight / (_height * _height / 1000);
 
     return bmi;
