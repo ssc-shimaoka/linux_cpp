@@ -26,13 +26,32 @@ int main()
         std::cout << "現在のファイル位置: " << ofs.tellp() << std::endl;
     }
 
-    
-
     //現在の位置から2文字分戻る
     ofs.seekp(-2, std::ios::cur);
 
     std::cout << "現在のファイル位置: " << ofs.tellp() << std::endl;
     ofs << "abcde" << std::endl;
+
+    //std::cin.get();
+
+    //↑で作ったファイルを読み取り専用で開く
+    std::ifstream ifs(fileName);
+    if (!ifs)
+    {
+        std::cout << "ファイルが開けませんでした。" << std::endl;
+        std::cin.get();
+        return 0;
+    }
+
+    std::string data;
+    //ファイルからstringにデータ格納
+    std::string buf;
+    while (!ifs.eof())
+    {
+        std::getline(ifs, buf);
+        data += buf + "\n";
+    }
+    std::cout << "ファイルの中身：" << data << std::endl;
 
     std::cin.get();
 }
