@@ -7,16 +7,16 @@
 std::mutex mtx;
 
 void worker() {
-    // 共通の資源（ここでは標準出力）を使う前にロックをかける
-    mtx.lock();
+    // lock_guardを使うと、スコープの終わりでlock()変数が破棄されるのにともなって、自動的にロックも解除される
+    std::lock_guard<std::mutex> lock(mtx);
 
     std::cout << "lock!" << std::endl;
     // 資源を使った処理を行う
     std::cout << "thread id: " << std::this_thread::get_id() << std::endl;
 
     // 使い終わったらロックを外す
-    mtx.unlock();
-    std::cout << "Unlock!" << std::endl;
+    //mtx.unlock();
+    //std::cout << "Unlock!" << std::endl;
 }
 
 int main() {
