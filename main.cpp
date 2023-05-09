@@ -10,7 +10,7 @@ class Shape{
 
     public:
     // コンストラクタ
-    Shape(int data):mData(data), mName("Shape") {}
+    Shape(int data):mData(data), mName("Shape") {std::cout << __PRETTY_FUNCTION__ << std::endl;}
 
     int getData(){return mData;}
     virtual std::string& getName(){return mName;}
@@ -22,7 +22,7 @@ class Square:public Shape{
 
   public:
   // コンストラクタ
-  Square(int data):Shape(data), mName("Square"){}
+  Square(int data):Shape(data), mName("Square"){std::cout << __PRETTY_FUNCTION__ << std::endl;}
 
   int getData(){return Shape::mData;}
   std::string& getName() override {return mName;}
@@ -34,7 +34,7 @@ class Circle:public Shape{
 
   public:
   // コンストラクタ
-  Circle(int data):Shape(data), mName("Circle"){}
+  Circle(int data):Shape(data), mName("Circle"){std::cout << __PRETTY_FUNCTION__ << std::endl;}
 
   int getData(){return Shape::mData;}
   std::string& getName() override {return mName;}
@@ -42,6 +42,7 @@ class Circle:public Shape{
 
 int main()
 {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
 
     Circle c(10);
     Shape* pC = &c;
