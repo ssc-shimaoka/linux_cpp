@@ -2,32 +2,38 @@
 #include <iostream>
 #include <string>
 
+// ベースクラス定義
 class Shape{
-    protected:
+    public:
     int mData;
     std::string mName;
 
     public:
+    // コンストラクタ
     Shape(int data):mData(data), mName("Shape") {}
 
     int getData(){return mData;}
     virtual std::string& getName(){return mName;}
 };
 
+// 四角クラス定義
 class Square:public Shape{
   std::string mName;
 
   public:
+  // コンストラクタ
   Square(int data):Shape(data), mName("Square"){}
 
   int getData(){return Shape::mData;}
   std::string& getName() override {return mName;}
 };
 
+// 丸クラス定義
 class Circle:public Shape{
   std::string mName;
 
   public:
+  // コンストラクタ
   Circle(int data):Shape(data), mName("Circle"){}
 
   int getData(){return Shape::mData;}
@@ -40,6 +46,7 @@ int main()
     Circle c(10);
     Shape* pC = &c;
     std::cout << "Data: " << pC->getData() << ", Name: " << pC->getName() << std::endl;
+    //std::cout << "Data: " << pC->Shape::mData << ", Name: " << pC->getName() << std::endl;
 
     Square p(20);
     Square* pP = &p;
