@@ -3,6 +3,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <vector>
+#include <future>
 
 using namespace std;
 
@@ -20,11 +21,17 @@ class Observer{
 class MyObserver: public Observer{
   public:
   void Update() override;
+  int getloopFlag();
+  private:
+  int loopFlg = 1;
 };
 
 void MyObserver::Update(){
   cout << "非同期処理 完了通知されました" << endl;
+  loopFlg = 0;
 }
+
+int MyObserver::getloopFlag(){return loopFlg;}
 
 //----------------------------------------------------
 //sujectクラス
@@ -45,15 +52,17 @@ void Subject::AddObserver(Observer& observer){
 
 void Subject::AsyncProcess(){
   //非同期処理実装
-  std::thread t([&]{ 
+  //std::thread t([&]{ 
+  auto t = std::async(std::launch::async, []{
     cout << "別スレッド処理 sleep実施直前" << endl;
     sleep(3); 
     cout << "別スレッド処理 sleep実施完了" << endl;
-    Nofify();
   });
  
   //非同期完了待ち（無限待ち状態　設定箇所）
-  t.join();
+  //t.join();
+  t.get();
+  Nofify();
 }
 
 void Subject::Nofify(){
@@ -74,9 +83,13 @@ int main()
   cout << "main Start" << endl;
 
   subject.AddObserver(myobserver);
-
   subject.AsyncProcess();
-  
+
+  while(myobserver.getloopFlag() == 1){
+    cout << "main loop" << endl;
+    //subject.AsyncProcess();
+  }
+
   //subject.Nofify();
 
   cout << "main End" << endl;
