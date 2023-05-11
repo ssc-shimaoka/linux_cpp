@@ -19,7 +19,7 @@ class Observer{
 //----------------------------------------------------
 class MyObserver: public Observer{
   public:
-  void Update();
+  void Update() override;
 };
 
 void MyObserver::Update(){
@@ -49,6 +49,7 @@ void Subject::AsyncProcess(){
     cout << "別スレッド処理 sleep実施直前" << endl;
     sleep(3); 
     cout << "別スレッド処理 sleep実施完了" << endl;
+    Nofify();
   });
  
   //非同期完了待ち（無限待ち状態　設定箇所）
@@ -75,8 +76,9 @@ int main()
   subject.AddObserver(myobserver);
 
   subject.AsyncProcess();
-  subject.Nofify();
- 
+  
+  //subject.Nofify();
+
   cout << "main End" << endl;
   return 0;
 }
